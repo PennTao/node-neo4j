@@ -1,0 +1,44 @@
+extends graphlayout
+
+block content
+  script.
+    var i,
+        s,
+        path = !{JSON.stringify(JSON.parse(path))}
+        g = {
+          nodes: [],
+          edges: []
+        };
+        colors = [
+          '#617db4',
+          '#668f3c',
+          '#c6583e',
+          '#b956af'
+    ];
+
+    for (i = 0; i < path.length; i++)
+      g.nodes.push({
+        id: 'n' + i,
+        label: path[i]['name'],
+        x: -i + Math.random(),
+        y: i +  Math.random(),
+        size: 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        borderColor: colors[Math.floor(Math.random()* colors.length)]
+      });
+    for (i = 0; i < path.length - 1; i++)
+      g.edges.push({
+        id: 'e' + i,
+        source: 'n' + i,
+        target: 'n' + (i+1),
+        type: "arrow",
+        size: 5,
+        color: '#ccc'
+      });
+    sigma.renderers.def = sigma.renderers.canvas
+
+    s = new sigma({
+      graph: g,
+      container: 'graph-container'
+    });
+    sigma.plugins.dragNodes(s, s.renderers[0]);

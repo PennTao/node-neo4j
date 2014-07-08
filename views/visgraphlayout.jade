@@ -1,0 +1,50 @@
+doctype 5
+html
+  head
+    title VIS Graph
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type="text/javascript", src='/javascript/vis.js')
+    script.
+      var nodes = null;
+      var edges = null;
+      var network = null;
+      var i = 0;
+      path = !{JSON.stringify(JSON.parse(path))}
+      function draw() {
+        nodes = [];
+        edges = [];
+        var nodeCount = path.length;
+        for(i = 0; i < nodeCount; i++)
+          nodes.push({
+            id: i,
+            label: path[i]['name']
+          });
+        for(i = 0; i < nodeCount-1; i++)
+          edges.push({
+              from: i,
+              to: i+1,
+              style:"arrow"
+          })
+
+        var container = document.getElementById('mynetwork');
+        var data = {
+          nodes: nodes,
+          edges: edges
+        };
+
+        var options = {
+          edges: {
+          },
+          stabilize: false
+        };
+        network = new vis.Network(container, data, options);
+
+        // add event listeners
+        network.on('select', function(params) {
+          document.getElementById('selection').innerHTML = 'Selection: ' + params.nodes;
+        });
+      }
+  body(onload = 'draw()')
+    block content
+
+
